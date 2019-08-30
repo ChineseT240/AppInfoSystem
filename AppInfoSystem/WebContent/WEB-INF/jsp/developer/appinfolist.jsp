@@ -7,7 +7,7 @@
 		<div class="x_panel">
 			<div class="x_title">
 				<h2>
-					APP 信息管理维护 <i class="fa fa-user"></i><small>${devUserSession.devName}
+					APP 信息管理维护 <i class="fa fa-user"></i><small>${devUserSession.userName}
 						- 您可以通过搜索或者其他的筛选项对APP的信息进行修改、删除等管理操作。^_^</small>
 				</h2>
 				<div class="clearfix"></div>
@@ -41,7 +41,7 @@
 							</div>
 						</div>
 					</li>
-					<li>
+					 <li>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">所属平台</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
@@ -57,6 +57,8 @@
 							</div>
 						</div>
 					</li>
+					
+					
 					<li>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">一级分类</label>
@@ -73,6 +75,7 @@
 							</div>
 						</div>
 					</li>
+					
 					<li>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">二级分类</label>
@@ -90,6 +93,7 @@
 							</div>
 						</div>
 					</li>
+					
 					<li>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">三级分类</label>
@@ -105,7 +109,8 @@
         						</select>
 							</div>
 						</div>
-					</li>
+					</li> 
+					
 					<li><button type="submit" class="btn btn-primary"> 查 &nbsp;&nbsp;&nbsp;&nbsp;询 </button></li>
 				</ul>
 			</form>
@@ -255,7 +260,7 @@
 					</div>
 				</div>
 			</div>
-
+                
 		</div>
 	</div>
 </div>
