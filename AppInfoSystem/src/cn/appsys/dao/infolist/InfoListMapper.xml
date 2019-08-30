@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.appsys.dao.infolist.InfoListMapper">
+
+<select id="SelectAppState" resultType="Data_dictionary">
+SELECT * FROM data_dictionary WHERE typeName='app状态' ORDER BY  valueId 
+</select>
+
+<select id="SelectPlatform" resultType="Data_dictionary">
+SELECT * FROM data_dictionary WHERE typeName='所属平台' ORDER BY  valueId 
+</select>
+
+
+<select id="SelectV1" resultType="app_category">
+SELECT * FROM app_category WHERE parentid IS NULL
+</select>
+
+<select id="SelectV2" resultType="app_category">
+SELECT * FROM app_category WHERE parentid=#{pid}
+</select>
+
+<select id="SelectV3" resultType="app_category">
+SELECT * FROM app_category WHERE parentid=#{pid}
+</select>
+</mapper>

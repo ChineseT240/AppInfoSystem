@@ -57,6 +57,11 @@ public class UserController {
 		
 	}
 	
+	/**
+	 * 注销
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/logout")
 	public String Logout(HttpSession session){
 		System.err.println("注销");
