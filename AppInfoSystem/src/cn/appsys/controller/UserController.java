@@ -20,7 +20,7 @@ public class UserController {
 	
 	@RequestMapping("/JoinLogin")
 	public String JoinLogin(@RequestParam(value = "devCode") String devCode,@RequestParam(value = "devPassword") String devPassword,HttpSession session){
-		System.err.println("devCode:"+devCode+"  ");
+		System.err.println("devCode:"+devCode+"  devPassword");
 		return "backendlogin";
 		
 	}
