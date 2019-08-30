@@ -55,6 +55,6 @@
  
   <!-- 欢迎页面 -->
   <welcome-file-list>
-  	<welcome-file>/WEB-INF/jsp/devlogin.jsp</welcome-file>
+  	<welcome-file>devlogin</welcome-file>
   </welcome-file-list>
 </web-app>
