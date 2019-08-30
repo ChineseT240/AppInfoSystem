@@ -55,7 +55,7 @@
 						</div>
 						<div class="profile_info">
 							<span>Welcome,</span>
-							<h2>${devUserSession.userName }</h2>
+							<h2>${devUserSession.userCode }</h2>
 						</div>
 					</div>
 					<!-- /menu profile quick info -->
@@ -125,7 +125,7 @@
 									class=" fa fa-angle-down"></span> </a>
 								<ul class="dropdown-menu dropdown-usermenu pull-right">
 									<li><a
-										href="${pageContext.request.contextPath }/dev/logout"><i
+										href="${pageContext.request.contextPath }/user/logout"><i
 											class="fa fa-sign-out pull-right"></i> Log Out</a>
 									</li>
 								</ul></li>

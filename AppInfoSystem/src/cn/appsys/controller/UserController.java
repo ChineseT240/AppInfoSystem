@@ -25,6 +25,13 @@ public class UserController {
 		return "devlogin";
 	}
 	
+	/**
+	 * 登陆的方法
+	 * @param devCode
+	 * @param devPassword
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="JoinLogin",method=RequestMethod.POST)
 	public String JoinLogin(@RequestParam(value = "devCode") String devCode,@RequestParam(value = "devPassword") String devPassword,HttpSession session){
 		Backend_user user=null;
@@ -50,4 +57,10 @@ public class UserController {
 		
 	}
 	
+	@RequestMapping(value="/logout")
+	public String Logout(HttpSession session){
+		System.err.println("注销");
+		session.setAttribute("devUserSession", null);
+		return "/devlogin";
+	}
 }
