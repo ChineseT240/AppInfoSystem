@@ -24,4 +24,75 @@ SELECT * FROM app_category WHERE parentid=#{pid}
 <select id="SelectV3" resultType="app_category">
 SELECT * FROM app_category WHERE parentid=#{pid}
 </select>
+
+<select id="Select" resultMap="List">
+SELECT info.softwareName as "softwareName",info.APKName as "APKName",info.softwareSize as "softwareSize",
+(SELECT valueName FROM data_dictionary as c WHERE info.status = c.valueId AND typeName="APP状态") as 'statusName',
+(SELECT valueName FROM data_dictionary as c WHERE info.flatformId = c.valueId AND typeName="所属平台") as 'flatformName',
+(SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel1=app_category.id) as "categoryLevel1",
+(SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel2=app_category.id) as "categoryLevel2",
+(SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel3=app_category.id) as "categoryLevel3",
+downloads,status,
+(SELECT versionNo FROM app_version WHERE info.versionId=app_version.id ) as "versionNo"
+FROM app_info AS info
+<where>
+<if test="softwareName!=null and softwareName!=''">
+softwareName LIKE CONCAT('%',#{softwareName},'%')
+</if>
+<if test="status!=null and status!=''">
+ AND status=#{status} AND flatformId=#{flatformId}
+</if>
+<if test="categoryLevel1!=null and categoryLevel1!=''">
+ AND categoryLevel1=#{categoryLevel1}
+</if>
+<if test="categoryLevel2!=null and categoryLevel2!=''">
+ AND categoryLevel2=#{categoryLevel2}
+</if>
+<if test="categoryLevel3!=null and categoryLevel3!=''">
+ AND categoryLevel3=#{categoryLevel3}
+</if>
+</where>
+  LIMIT #{size},#{pageSize}
+</select>
+
+<resultMap type="App_info" id="List">
+<id property="id" column="id"/>
+<result property="softwareName" column="softwareName"/>
+<result property="APKName" column="APKName"/>
+<result property="softwareSize" column="softwareSize"/>
+<result property="downloads" column="downloads"/>
+<result property="categoryLevel1Name" column="categoryLevel1"/>
+<result property="categoryLevel2Name" column="categoryLevel2"/>
+<result property="categoryLevel3Name" column="categoryLevel3"/>
+<result property="flatformName" column="flatformName"/>
+<result property="statusName" column="statusName"/>
+<result property="versionNo" column="versionNo"/>
+<result property="status" column="status"/>
+</resultMap>
+
+
+<select id="Count" resultType="int">
+SELECT COUNT(1) FROM app_info 
+<where>
+<if test="softwareName!=null and softwareName!=''">
+softwareName LIKE CONCAT('%',#{softwareName},'%')
+</if>
+<if test="status!=null and status!=''">
+ AND status=#{status} AND flatformId=#{flatformId}
+</if>
+<if test="categoryLevel1!=null and categoryLevel1!=''">
+ AND categoryLevel1=#{categoryLevel1}
+</if>
+<if test="categoryLevel2!=null and categoryLevel2!=''">
+ AND categoryLevel2=#{categoryLevel2}
+</if>
+<if test="categoryLevel3!=null and categoryLevel3!=''">
+ AND categoryLevel3=#{categoryLevel3}
+</if>
+</where>
+</select>
+
+<select id="SelectAPK" resultType="App_info">
+SELECT * FROM app_info WHERE APKName=#{APKName}
+</select>
 </mapper>

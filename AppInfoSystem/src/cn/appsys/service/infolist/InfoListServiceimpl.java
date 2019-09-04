@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.appsys.dao.infolist.InfoListMapper;
 import cn.appsys.pojo.App_category;
+import cn.appsys.pojo.App_info;
 import cn.appsys.pojo.Data_dictionary;
 
 @Service("InfoListService")
@@ -54,6 +55,38 @@ public class InfoListServiceimpl implements InfoListService {
 				e.printStackTrace();
 			}
 			return infolistMapper.SelectV2(pid);
+	}
+
+	@Override
+	public List<App_info> Select(String softwareName, String status, String flatformId, String categoryLevel1,
+			String categoryLevel2, String categoryLevel3, int size, int pageSize) {
+		 try {
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return infolistMapper.Select(softwareName, status, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, size, pageSize);
+	}
+
+	@Override
+	public int Count(String softwareName, String status, String flatformId, String categoryLevel1,
+			String categoryLevel2, String categoryLevel3) {
+		 try {
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return infolistMapper.Count(softwareName, status, flatformId, categoryLevel1, categoryLevel2, categoryLevel3);
+	}
+
+	@Override
+	public List<App_info> SelectAPK(String APKName) {
+		 try {
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return infolistMapper.SelectAPK(APKName);
 	}
 
 	
