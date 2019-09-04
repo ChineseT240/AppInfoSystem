@@ -29,6 +29,15 @@ public class App_info {
 	private String 	logoPicPath;
 	private String logoLocPath;
     private int versionId;
+    private App_category app_category;
+    private App_version app_version;
+    private String categoryLevel1Name;
+    private String categoryLevel2Name;
+    private String categoryLevel3Name;
+    private String flatformName;
+    private String statusName;
+    private String versionNo;
+    private Data_dictionary data_dictionary;
 	public int getId() {
 		return id;
 	}
@@ -172,6 +181,60 @@ public class App_info {
 	}
 	public void setVersionId(int versionId) {
 		this.versionId = versionId;
+	}
+	public App_category getApp_category() {
+		return app_category;
+	}
+	public void setApp_category(App_category app_category) {
+		this.app_category = app_category;
+	}
+	public App_version getApp_version() {
+		return app_version;
+	}
+	public void setApp_version(App_version app_version) {
+		this.app_version = app_version;
+	}
+	public Data_dictionary getData_dictionary() {
+		return data_dictionary;
+	}
+	public void setData_dictionary(Data_dictionary data_dictionary) {
+		this.data_dictionary = data_dictionary;
+	}
+	public String getCategoryLevel1Name() {
+		return categoryLevel1Name;
+	}
+	public void setCategoryLevel1Name(String categoryLevel1Name) {
+		this.categoryLevel1Name = categoryLevel1Name;
+	}
+	public String getCategoryLevel2Name() {
+		return categoryLevel2Name;
+	}
+	public void setCategoryLevel2Name(String categoryLevel2Name) {
+		this.categoryLevel2Name = categoryLevel2Name;
+	}
+	public String getCategoryLevel3Name() {
+		return categoryLevel3Name;
+	}
+	public void setCategoryLevel3Name(String categoryLevel3Name) {
+		this.categoryLevel3Name = categoryLevel3Name;
+	}
+	public String getFlatformName() {
+		return flatformName;
+	}
+	public void setFlatformName(String flatformName) {
+		this.flatformName = flatformName;
+	}
+	public String getStatusName() {
+		return statusName;
+	}
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	public String getVersionNo() {
+		return versionNo;
+	}
+	public void setVersionNo(String versionNo) {
+		this.versionNo = versionNo;
 	}
 	
 	

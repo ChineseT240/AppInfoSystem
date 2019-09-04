@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import cn.appsys.pojo.App_category;
+import cn.appsys.pojo.App_info;
 import cn.appsys.pojo.Data_dictionary;
 
 public interface InfoListService {
@@ -34,4 +35,22 @@ public interface InfoListService {
 	 */
 	public List<App_category> SelectV2(String pid);
 	
+	/**
+	 * 分页查询所有数据
+	 * @param softwareName
+	 * @param status
+	 * @param flatformId
+	 * @param categoryLevel1
+	 * @param categoryLevel2
+	 * @param categoryLevel3
+	 * @param frm
+	 * @param pageSize
+	 * @return
+	 */
+	public List<App_info> Select(String softwareName, String status, String flatformId, String categoryLevel1, String categoryLevel2, String categoryLevel3, int frm, int pageSize);
+	
+	
+	public int Count(String softwareName,String status, String flatformId,String categoryLevel1,String categoryLevel2,String categoryLevel3);
+	
+	public List<App_info> SelectAPK(String APKName);
 }
