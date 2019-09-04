@@ -1,10 +1,15 @@
 package cn.appsys.controller;
 
+import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
-
+import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.ibatis.annotations.Param;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.jsf.FacesContextUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -188,4 +194,73 @@ public class InfoListController {
 		return data;
 		
 	}
+	
+	@RequestMapping("/appinfoaddsave")
+	public String appinfoaddsave(@RequestParam(value = "softwareName") String softwareName,
+			@RequestParam(value = "APKName") String APKName,
+			@RequestParam(value = "supportROM") String supportROM, @RequestParam(value = "interfaceLanguage") String interfaceLanguage,
+			@RequestParam(value = "softwareSize") BigDecimal softwareSize, @RequestParam(value = "downloads") Integer downloads,
+			@RequestParam(value = "flatformId") Integer flatformId, @RequestParam(value = "categoryLevel1") Integer categoryLevel1,
+			@RequestParam(value = "categoryLevel2") Integer categoryLevel2, @RequestParam(value = "categoryLevel3") Integer categoryLevel3,
+			@RequestParam(value = "appInfo") String appInfo,@RequestParam(value="a_logoPicPath",required=false) MultipartFile attach
+			,HttpServletRequest request) {
+		String idPicpath=null;
+		String path=null;
+		String logoPicPath=null;
+		System.err.println("进入增加方法");
+		System.err.println("softwareName"+softwareName);
+		System.err.println("APKName"+APKName);
+		System.err.println("supportROM"+supportROM);
+		System.err.println("interfaceLanguage"+interfaceLanguage);
+		System.err.println("softwareSize"+softwareSize);
+		System.err.println("downloads"+downloads);
+		System.err.println("flatformId"+flatformId);
+		System.err.println("categoryLevel1"+categoryLevel1);
+		System.err.println("categoryLevel2"+categoryLevel2);
+		System.err.println("categoryLevel3"+categoryLevel3);
+		System.err.println("appInfo"+appInfo);
+	//	System.err.println("logoPicPath"+logoPicPath);
+		if (!attach.isEmpty()) {
+		    path=request.getSession().getServletContext().getRealPath("statics"+File.separator+"uploadfiles");
+			System.err.println("uploadFile path=======>"+path);   //服务器路径名
+			String oldFileName=attach.getOriginalFilename(); //原文件名
+			System.err.println("原文件名:=========>"+oldFileName);
+			String prefix=FilenameUtils.getExtension(oldFileName);   //原文件名后缀
+			System.err.println("原文件后缀:"+prefix);
+			int filesize=9999999;
+		    System.err.println("原文件大小:=========>"+attach.getSize());
+		    if (attach.getSize()>filesize) {
+				request.setAttribute("fileUploadError", "上传文件不得超过9999999KB");
+				return "redirect:/infolist/appinfoaddsave";
+			}else if (prefix.equalsIgnoreCase("jpg")||prefix.equalsIgnoreCase("png")||prefix.equalsIgnoreCase("jpeg")||prefix.equalsIgnoreCase("pneg")) {
+				int random=(int)(Math.random()*(1000000-0)+0);
+				String fileName=System.currentTimeMillis()+random+"_Personal.jpg";
+				System.err.println("新名字:===========>"+fileName);
+				File targetFile=new File(path,fileName);
+				if (!targetFile.exists()) {
+					targetFile.mkdir();
+				}
+				//保存
+				try {
+					attach.transferTo(targetFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "*上传失败!");
+					return "redirect:/infolist/appinfoaddsave";
+				}
+				idPicpath=path+File.separator+fileName;
+			    System.err.println("idPicpath:=========>"+idPicpath);
+			   logoPicPath=request.getServletContext().getRealPath("statics"+File.separator+"uploadfiles")+File.separator+fileName;
+			   System.err.println(logoPicPath);
+			}else {
+				request.setAttribute("fileUploadError", "*上传图片格式不正确");
+				return "redirect:/infolist/appinfoaddsave";
+			}
+		}
+		int num=iService.Add(softwareName, APKName, supportROM, interfaceLanguage, softwareSize, downloads, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, appInfo, logoPicPath,path);
+		System.err.println(num);
+		return "redirect:list";
+
+	}
+	
 }
