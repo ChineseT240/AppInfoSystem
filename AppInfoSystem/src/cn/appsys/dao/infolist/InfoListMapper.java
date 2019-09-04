@@ -1,6 +1,9 @@
 package cn.appsys.dao.infolist;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import javax.websocket.server.PathParam;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -35,9 +38,40 @@ public interface InfoListMapper {
 	 */
 	public List<App_category> SelectV2(@Param("pid") String pid);
 	
+	/**
+	 * 查询分页列表
+	 * @param softwareName
+	 * @param status
+	 * @param flatformId
+	 * @param categoryLevel1
+	 * @param categoryLevel2
+	 * @param categoryLevel3
+	 * @param size
+	 * @param pageSize
+	 * @return
+	 */
 	public List<App_info> Select(@Param("softwareName") String softwareName,@Param("status") String status,@Param("flatformId") String flatformId,@Param("categoryLevel1") String categoryLevel1,@Param("categoryLevel2") String categoryLevel2,@Param("categoryLevel3") String categoryLevel3,@Param("size") int size,@Param("pageSize") int pageSize);
 	
+	/**
+	 * 查询总记录数
+	 * @param softwareName
+	 * @param status
+	 * @param flatformId
+	 * @param categoryLevel1
+	 * @param categoryLevel2
+	 * @param categoryLevel3
+	 * @return
+	 */
 	public int Count(@Param("softwareName") String softwareName,@Param("status") String status,@Param("flatformId") String flatformId,@Param("categoryLevel1") String categoryLevel1,@Param("categoryLevel2") String categoryLevel2,@Param("categoryLevel3") String categoryLevel3);
 	
+	/**
+	 * 查询是否有APKName
+	 * @param APKName
+	 * @return
+	 */
 	public List<App_info> SelectAPK(@Param("APKName") String APKName);
+	
+	public int Add(@Param("softwareName") String softwareName,@Param("APKName") String APKName,@Param("supportROM") String supportROM ,@Param("interfaceLanguage") String interfaceLanguage,@Param("softwareSize") BigDecimal softwareSize,@Param("downloads") Integer downloads,@Param("flatformId") Integer flatformId,@Param("categoryLevel1") Integer categoryLevel1,@Param("categoryLevel2") Integer categoryLevel2,@Param("categoryLevel3") Integer categoryLevel3,@Param("appInfo") String appInfo,@Param("logoPicPath") String logoPicPath,@Param("logoLocPath") String logoLocPath);
+	
+	
 }

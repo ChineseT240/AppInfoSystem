@@ -1,5 +1,6 @@
 package cn.appsys.service.infolist;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,16 @@ public class InfoListServiceimpl implements InfoListService {
 			}
 			return infolistMapper.SelectAPK(APKName);
 	}
+
+	@Override
+	public int Add(String softwareName, String APKName, String supportROM, String interfaceLanguage,
+			BigDecimal softwareSize, Integer downloads, Integer flatformId, Integer categoryLevel1,
+			Integer categoryLevel2, Integer categoryLevel3, String appInfo, String logoPicPath,String logoLocPath) {
+		// TODO Auto-generated method stub
+		return infolistMapper.Add(softwareName, APKName, supportROM, interfaceLanguage, softwareSize, downloads, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, appInfo,logoPicPath,logoLocPath);
+	}
+
+	
 
 	
 }

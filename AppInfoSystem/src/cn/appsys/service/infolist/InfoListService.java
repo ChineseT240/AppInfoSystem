@@ -1,5 +1,6 @@
 package cn.appsys.service.infolist;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -49,8 +50,12 @@ public interface InfoListService {
 	 */
 	public List<App_info> Select(String softwareName, String status, String flatformId, String categoryLevel1, String categoryLevel2, String categoryLevel3, int frm, int pageSize);
 	
+	public int Add(String softwareName,String APKName,String supportROM ,String interfaceLanguage,BigDecimal softwareSize,Integer downloads, Integer flatformId,Integer categoryLevel1,Integer categoryLevel2,Integer categoryLevel3, String appInfo, String logoPicPath,String logoLocPath);
+	
 	
 	public int Count(String softwareName,String status, String flatformId,String categoryLevel1,String categoryLevel2,String categoryLevel3);
 	
 	public List<App_info> SelectAPK(String APKName);
+
+	
 }

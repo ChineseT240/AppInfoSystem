@@ -95,4 +95,11 @@ softwareName LIKE CONCAT('%',#{softwareName},'%')
 <select id="SelectAPK" resultType="App_info">
 SELECT * FROM app_info WHERE APKName=#{APKName}
 </select>
+
+<insert id="Add">
+	INSERT INTO app_info(softwareName,APKName,supportROM
+	,interfaceLanguage,softwareSize,downloads,flatformId,categoryLevel1,categoryLevel2,categoryLevel3,status,appInfo,logoPicPath,logoLocPath)
+	VALUES(#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize},#{downloads},#{flatformId},#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},"1",#{appInfo},#{logoPicPath},#{logoLocPath}
+	)
+</insert>
 </mapper>
