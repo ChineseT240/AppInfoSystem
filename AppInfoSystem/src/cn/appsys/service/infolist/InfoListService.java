@@ -57,5 +57,7 @@ public interface InfoListService {
 	
 	public List<App_info> SelectAPK(String APKName);
 
+	public App_info UpDateShow(String id,String versionId);
 	
+	public int Updata(App_info app_info);
 }

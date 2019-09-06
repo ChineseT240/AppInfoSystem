@@ -73,5 +73,7 @@ public interface InfoListMapper {
 	
 	public int Add(@Param("softwareName") String softwareName,@Param("APKName") String APKName,@Param("supportROM") String supportROM ,@Param("interfaceLanguage") String interfaceLanguage,@Param("softwareSize") BigDecimal softwareSize,@Param("downloads") Integer downloads,@Param("flatformId") Integer flatformId,@Param("categoryLevel1") Integer categoryLevel1,@Param("categoryLevel2") Integer categoryLevel2,@Param("categoryLevel3") Integer categoryLevel3,@Param("appInfo") String appInfo,@Param("logoPicPath") String logoPicPath,@Param("logoLocPath") String logoLocPath);
 	
+	public App_info UpDateShow(@Param("id") String id,@Param("versionId") String versionId);
 	
+	public int Updata(App_info app_info);
 }
