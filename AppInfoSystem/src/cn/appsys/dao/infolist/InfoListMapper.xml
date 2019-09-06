@@ -32,7 +32,7 @@ SELECT info.softwareName as "softwareName",info.APKName as "APKName",info.softwa
 (SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel1=app_category.id) as "categoryLevel1",
 (SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel2=app_category.id) as "categoryLevel2",
 (SELECT app_category.categoryName FROM app_category WHERE info.categoryLevel3=app_category.id) as "categoryLevel3",
-downloads,status,
+downloads,status,versionId,id,
 (SELECT versionNo FROM app_version WHERE info.versionId=app_version.id ) as "versionNo"
 FROM app_info AS info
 <where>
@@ -102,4 +102,23 @@ SELECT * FROM app_info WHERE APKName=#{APKName}
 	VALUES(#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize},#{downloads},#{flatformId},#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},"1",#{appInfo},#{logoPicPath},#{logoLocPath}
 	)
 </insert>
+
+
+<select id="UpDateShow" resultType="App_info">
+SELECT * ,(SELECT valueName FROM data_dictionary as c WHERE status = c.valueId AND typeName="APP状态") as 'statusName' FROM app_info 
+<trim prefix="where" prefixOverrides="and">
+<if test="id!=null and id!=''">
+id=#{id}
+</if>
+<if test="versionId!=null and versionId!=''">
+ AND versionId=#{versionId}
+</if>
+</trim>
+</select>
+
+<update id="Updata">
+	UPDATE app_info SET
+	softwareName=#{softwareName},APKName=#{APKName},supportROM=#{supportROM},softwareSize=#{softwareSize},downloads=#{downloads},flatformId=#{flatformId},categoryLevel1=#{categoryLevel1},categoryLevel2=#{categoryLevel2},categoryLevel3=#{categoryLevel3},appInfo=#{appInfo}
+	WHERE id=#{id}
+</update>
 </mapper>

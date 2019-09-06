@@ -66,6 +66,7 @@ public class InfoListServiceimpl implements InfoListService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		 System.err.println("size:"+size);
 			return infolistMapper.Select(softwareName, status, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, size, pageSize);
 	}
 
@@ -96,6 +97,18 @@ public class InfoListServiceimpl implements InfoListService {
 			Integer categoryLevel2, Integer categoryLevel3, String appInfo, String logoPicPath,String logoLocPath) {
 		// TODO Auto-generated method stub
 		return infolistMapper.Add(softwareName, APKName, supportROM, interfaceLanguage, softwareSize, downloads, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, appInfo,logoPicPath,logoLocPath);
+	}
+
+	@Override
+	public App_info UpDateShow(String id, String versionId) {
+		// TODO Auto-generated method stub
+		return infolistMapper.UpDateShow(id, versionId);
+	}
+
+	@Override
+	public int Updata(App_info app_info) {
+		// TODO Auto-generated method stub
+		return infolistMapper.Updata(app_info);
 	}
 
 	

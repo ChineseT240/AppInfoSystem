@@ -37,16 +37,33 @@ public class InfoListController {
 	private InfoListService iService;
 	
 	@RequestMapping(value="list",method=RequestMethod.GET)
-	public Object List(Model model){
+	public Object List(Model model,HttpSession session){
 		System.err.println("显示列表方法");
 		List<Data_dictionary> statusList=iService.SelectAppState();     //app状态
 		List<Data_dictionary> flatFormList=iService.SelectPlatform();     //所属平台
 		List<App_category> categoryLevel1List=iService.SelectV1();     //一级菜单
-		
-		
 		model.addAttribute("statusList", statusList);                    //app状态
 		model.addAttribute("flatFormList", flatFormList);                 //所属平台
 		model.addAttribute("categoryLevel1List", categoryLevel1List);     //一级菜单
+		PageSupport page=new PageSupport();
+		if (session.getAttribute("appInfoList")==null) {
+			List<App_info> infoList=iService.Select("", "", "", "", "", "",0,page.getPageSize());
+			session.setAttribute("appInfoList", infoList);
+			int totalCount=iService.Count("", "", "", "", "", "");
+			System.err.println("totalCount:"+totalCount);
+			page.setTotalCount(totalCount);
+			page.setCurrentPageNo(1);
+			int num=0;   //总页数
+			if (totalCount%page.getPageSize()==0) {
+				num=totalCount/page.getPageSize()-1;
+			}else {
+				num=totalCount/page.getPageSize();
+			}
+			page.setTotalPageCount(num);
+			System.err.println("CurrentPageNo:"+1+"TotalPageCount:"+totalCount);
+			session.setAttribute("pages", page);
+		}
+		
 		return "developer/appinfolist";
 		
 	}
@@ -69,7 +86,7 @@ public class InfoListController {
 		return str;
 	}
 	
-	@RequestMapping(value="list",method=RequestMethod.POST)
+	@RequestMapping(value="listcha")
 	public String List(HttpSession session,@RequestParam(value="querySoftwareName",required=false) String softwareName,@RequestParam(value="queryStatus",required=false) String status,@RequestParam(value="queryFlatformId",required=false) String flatformId,@RequestParam(value="queryCategoryLevel1",required=false) String categoryLevel1,@RequestParam(value="queryCategoryLevel2",required=false) String categoryLevel2,@RequestParam(value="queryCategoryLevel3",required=false) String categoryLevel3,@RequestParam(value="pageIndex",required=false) String size
 			,@RequestParam(value="querySoftwareName",required=false) String querySoftwareName
 			,@RequestParam(value="queryStatus",required=false) Integer queryStatus
@@ -91,10 +108,10 @@ public class InfoListController {
 			if (size==null) {
 				frm=0;
 			}else{
-				frm=Integer.parseInt(size);
+				frm=Integer.parseInt(size)-1;
 			}
 			System.err.println("frm"+frm);
-			List<App_info> infoList=iService.Select(softwareName, status, flatformId, categoryLevel1, categoryLevel2, categoryLevel3,(frm-1)*page.getPageSize(),page.getPageSize());
+			List<App_info> infoList=iService.Select(softwareName, status, flatformId, categoryLevel1, categoryLevel2, categoryLevel3,frm*page.getPageSize(),page.getPageSize());
 			System.err.println("List:"+infoList);
 			for (App_info app_info : infoList) {
 				System.err.println(app_info.getSoftwareName());
@@ -104,7 +121,13 @@ public class InfoListController {
 			System.err.println("totalCount:"+totalCount);
 			page.setTotalCount(totalCount);
 			page.setCurrentPageNo(frm);
-			page.setTotalPageCount(totalCount/page.getPageSize()+1);
+			int num=0;   //总页数
+			if (totalCount%page.getPageSize()==0) {
+				num=totalCount/page.getPageSize()-1;
+			}else {
+				num=totalCount/page.getPageSize();
+			}
+			page.setTotalPageCount(num);
 			System.err.println("CurrentPageNo:"+frm+"TotalPageCount:"+totalCount);
 			session.setAttribute("pages", page);
 		} catch (Exception e) {
@@ -165,6 +188,11 @@ public class InfoListController {
 		return str;
 	}
 	
+	/**
+	 * 验证是否有此APK
+	 * @param APKName
+	 * @return
+	 */
 	@RequestMapping(value="apkexist.json",produces={"application/json;charset=UTF-8"})
 	@ResponseBody
 	public Object blurAPKName(@RequestParam(value="APKName",required=false) String APKName){
@@ -195,6 +223,23 @@ public class InfoListController {
 		
 	}
 	
+	/**
+	 * 新增保存
+	 * @param softwareName
+	 * @param APKName
+	 * @param supportROM
+	 * @param interfaceLanguage
+	 * @param softwareSize
+	 * @param downloads
+	 * @param flatformId
+	 * @param categoryLevel1
+	 * @param categoryLevel2
+	 * @param categoryLevel3
+	 * @param appInfo
+	 * @param attach
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/appinfoaddsave")
 	public String appinfoaddsave(@RequestParam(value = "softwareName") String softwareName,
 			@RequestParam(value = "APKName") String APKName,
@@ -250,7 +295,7 @@ public class InfoListController {
 				}
 				idPicpath=path+File.separator+fileName;
 			    System.err.println("idPicpath:=========>"+idPicpath);
-			   logoPicPath=request.getServletContext().getRealPath("statics"+File.separator+"uploadfiles")+File.separator+fileName;
+			   logoPicPath=request.getServletContext().getContextPath()+"/statics/uploadfiles/"+fileName;
 			   System.err.println(logoPicPath);
 			}else {
 				request.setAttribute("fileUploadError", "*上传图片格式不正确");
@@ -259,8 +304,90 @@ public class InfoListController {
 		}
 		int num=iService.Add(softwareName, APKName, supportROM, interfaceLanguage, softwareSize, downloads, flatformId, categoryLevel1, categoryLevel2, categoryLevel3, appInfo, logoPicPath,path);
 		System.err.println(num);
-		return "redirect:list";
+		return "developer/appinfolist";
 
 	}
 	
+	
+	/**
+	 * 修改
+	 * @param vid
+	 * @param aid
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("appversionmodify")
+	public String appversionmodify(@RequestParam(value="vid") String vid,@RequestParam(value="aid") String aid,HttpSession session){
+		System.err.println("进入修改方法:>>>>>>>>>>>>>>>>>vid:"+vid+",aid:"+aid);
+		App_info app_info=iService.UpDateShow(aid, vid);
+		session.setAttribute("appInfo", app_info);
+		return "redirect:appinfomodify";	
+	}
+	
+	@RequestMapping("appinfomodify")
+	public String appinfomodify(){
+		return "developer/appinfomodify";
+		
+	}
+	
+	/**
+	 * 修改
+	 * @param softwareName
+	 * @param APKName
+	 * @param supportROM
+	 * @param interfaceLanguage
+	 * @param softwareSize
+	 * @param downloads
+	 * @param flatformId
+	 * @param categoryLevel1
+	 * @param categoryLevel2
+	 * @param categoryLevel3
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("appinfomodifysave")
+	public String appinfomodifysave(@RequestParam("softwareName") String softwareName,@RequestParam("APKName") String APKName,
+			@RequestParam("supportROM") String supportROM,@RequestParam("interfaceLanguage") String interfaceLanguage,
+			@RequestParam("softwareSize") BigDecimal softwareSize,@RequestParam("downloads") int downloads,
+			@RequestParam("flatformId") int flatformId,@RequestParam("categoryLevel1") int categoryLevel1,
+			@RequestParam("categoryLevel2") int categoryLevel2,@RequestParam("categoryLevel3") int categoryLevel3,
+			@RequestParam("id") int id,@RequestParam("appInfo") String appInfo){
+		    System.out.println("softwareName"+softwareName);
+		    System.out.println("APKName"+APKName);
+		    System.out.println("supportROM"+supportROM);
+		    System.out.println("interfaceLanguage"+interfaceLanguage);
+		    System.out.println("softwareSize"+softwareSize);
+		    System.out.println("downloads"+downloads);
+		    System.out.println("flatformId"+flatformId);
+		    System.out.println("categoryLevel1"+categoryLevel1);
+		    System.out.println("categoryLevel2"+categoryLevel2);
+		    System.out.println("categoryLevel3"+categoryLevel3);
+		    System.out.println("id"+id);
+		    App_info app_info=new App_info();
+		    app_info.setSoftwareName(softwareName);
+		    app_info.setSupportROM(supportROM);
+		    app_info.setAPKName(APKName);
+		    app_info.setInterfaceLanguage(interfaceLanguage);
+		    app_info.setDownloads(downloads);
+		    app_info.setSoftwareSize(softwareSize);
+		    app_info.setFlatformId(flatformId);
+		    app_info.setCategoryLevel1(categoryLevel1);
+		    app_info.setCategoryLevel2(categoryLevel2);
+		    app_info.setCategoryLevel3(categoryLevel3);
+		    app_info.setId(id);
+		    app_info.setAppInfo(appInfo);
+		    if (iService.Updata(app_info)>0) {
+		       System.err.println("进来了修改信息");
+		    	return "redirect:/infolist/listcha";
+			}else{
+				return "redirect:appinfomodifysave";
+			}
+	}
+	
+	@RequestMapping("appversionadd")
+	public String appversionadd(@RequestParam(value="id") String id){
+		System.err.println("id"+id);
+		return "appversionadd";
+		
+	}
 }
